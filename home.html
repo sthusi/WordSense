@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Word Sense</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <style>
+            #Noun {
+                color: red;
+            }
+            
+            #Verb {
+                color: green;
+            }
+            
+            #Adjective {
+                color: blue;
+            }
+            
+            #adverb {
+                color: yellow;
+            }
+            
+            #tt {
+                font-size: large;
+            }
+        </style>
+    </head>
+
+    <body style="background-color: #ddc587; border-radius: 1%;border: grey">
+        <div class="container">
+            <main>
+                <div class="py-3">
+                    <!-- <img class="d-block mx-auto mb-4" src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
+                    <h2>Welcome</h2>
+
+                </div>
+
+                <div class="row g-5">
+                    <div class="col-md-5 col-lg-4 order-md-last">
+                        <div class="">
+                            <p>Input text in the text area and clock the disambigute button</p>
+                            <p>
+                                <spam id="Noun">Nouns</spam> are highlighted in red,
+                                <spam id="Adjective">adjectives</spam> in blue,
+                                <spam id="Verb">verbs</spam> in green and
+                                <spam id="adverb">adverbs</spam> in yellow</p>
+                        </div>
+                        <div>
+                            <button type="button" onclick="submit()" class="btn btn-primary" id="disambigutebtn">
+                                <div id="btnText">Disambigute</div>
+                              <div id="btnLoad">
+                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Loading...
+                              </div>
+                              
+                            
+                            </button>
+                            <br>
+
+                        </div>
+                        <div>
+                            <br>
+                            <button onclick="sentiment()" class="btn btn-primary">
+                                Sentiment
+                            </button>
+                        </div>
+                        <br>
+                        <div>
+                            <ol class="list-group list-group-numbered">
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">positive</div>
+
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill" id="pos">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Neutral</div>
+
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill" id="neu">0</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-start">
+                                    <div class="ms-2 me-auto">
+                                        <div class="fw-bold">Negative</div>
+
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill" id="neg">0</span>
+                                </li>
+                            </ol>
+                        </div>
+
+                    </div>
+                    <div class="col-md-7 col-lg-8">
+                        <div>
+
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="13">
+                              
+                            </textarea>
+                        </div>
+                        <br>
+                        <div id="tt">
+
+                        </div>
+
+                    </div>
+                </div>
+            </main>
+
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+
+
+        <script>
+            $('#btnLoad').hide();
+
+            function x() {
+                submit();
+            }
+
+            function submit() {
+                $('#btnText').hide();
+                $('#btnLoad').show();
+
+                $('#pos').html(data.data.pos)
+                $('#neu').html(data.data.neu)
+                $('#neg').html(data.data.neg)
+                $("#disambigutebtn").prop("disabled", true);
+                console.log($("#exampleFormControlTextarea1").val().trim())
+                if ($("#exampleFormControlTextarea1").val().trim() === "") {
+                    alert("Invalid input, please type in your sentence.");
+                    $('#btnText').show();
+                    $('#btnLoad').hide();
+                    $("#disambigutebtn").prop("disabled", false);
+                    return 0;
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://mahlomola.pythonanywhere.com/api/ambigute/',
+                    data: {
+                        text: $("#exampleFormControlTextarea1").val()
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        /*  jQuery('#addfeed').html("");
+                        jQuery('.alert-success').html("");
+                        jQuery.each(data.errors, function(key, value) {
+
+                            jQuery('.alert-danger').show();
+                            jQuery('.alert-success').hide();
+                            jQuery('#addfeed').append('<p>' + value + '</p>');
+                        });
+
+                        if (data.hasOwnProperty('success')) {
+                            jQuery('.alert-danger').hide();
+                            jQuery('.alert-success').show();
+                            jQuery('.alert-success').append('<p>Record is successfully added</p>');
+                            Swal.fire(
+                                'Success',
+                                'Record is successfully added',
+                                'Success'
+                            )
+                            document.getElementById('f1').reset();
+                            location.reload(true)
+                        }; */
+                        $("#results").val("");
+                        for (var j in data.data) {
+
+                            $("#results").append("<li class=\"list-group-item\">" + data.data[j].Definition + "</li>");
+
+
+
+                        }
+
+                        $('#tt').html(data.data[0].pos.text);
+                        $("#disambigutebtn").prop("disabled", false);
+                        $('#btnText').show();
+                        $('#btnLoad').hide();
+
+                    },
+                    error: function(data) {
+                        console.log("error", data);
+                        $("#disambigutebtn").prop("disabled", false);
+                        $('#btnText').show();
+                        $('#btnLoad').hide();
+                    }
+                });
+
+            }
+
+
+            function sentiment() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://127.0.0.1:8000/api/ai/',
+                    dataType: 'json',
+                    data: {
+                        text: $("#exampleFormControlTextarea1").val().trim()
+                    },
+                    success: function(data) {
+                        console.log(data.data.pos);
+
+
+                        $('#pos').html(data.data.pos)
+                        $('#neu').html(data.data.neu)
+                        $('#neg').html(data.data.neg)
+
+                    },
+                    error: function(data) {
+                        console.log("error", data);
+
+                    }
+                })
+            }
+        </script>
+
+    </body>
+
+</html>
