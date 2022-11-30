@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Word Sense | registeration</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <style>
+            #Noun {
+                color: red;
+            }
+            
+            #Verb {
+                color: green;
+            }
+            
+            #Adjective {
+                color: blue;
+            }
+            
+            #adverb {
+                color: yellow;
+            }
+            
+            #tt {
+                font-size: large;
+            }
+            
+            #sub {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+            }
+        </style>
+    </head>
+
+    <body style="background-color: #ddc587; border-radius: 1%;border: grey">
+        <div class="container">
+            <main>
+                <div class="py-3">
+                    <!-- <img class="d-block mx-auto mb-4" src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"> -->
+                    <h2>Registration</h2>
+
+                </div>
+
+                <div class="row g-5">
+                    <div class="col-md-5 col-lg-4 order-md-last">
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Surname</label>
+                            <input type="text" class="form-control" id="lastName" placeholder="Surname">
+                        </div>
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Phone Number</label>
+                            <input type="number" class="form-control" id="phoneNumber" placeholder="Phone Number">
+                        </div>
+
+                    </div>
+                    <div class="col-md-5 col-lg-5">
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="firstName" placeholder="Name">
+                        </div>
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="email">
+                        </div>
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="userName" placeholder="Username">
+                        </div>
+
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="password">
+                        </div>
+                        <div class="col-md-8 col-lg-8 mb-3">
+                            <label for="exampleFormControlInput1" class="form-label">Confirm password</label>
+                            <input type="password" class="form-control" id="confirmPassword" placeholder="Confirm password">
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="center mb-3" id="sub">
+                    <button type="button" class="btn btn-primary" id="disambigutebtn" onclick="submit()">
+                        <div id="btnText">Register</div>
+                      <div id="btnLoad">
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Loading...
+                      </div>
+                      
+                    
+                    </button>
+                </div>
+
+            </main>
+
+        </div>
+        <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+
+
+        <script>
+            $('#btnLoad').hide();
+
+            function x() {
+                submit();
+            }
+
+            function submit() {
+                $('#btnText').hide();
+                $('#btnLoad').show();
+                $("#disambigutebtn").prop("disabled", true);
+
+                console.log(createObject());
+                /*   if ($("#exampleFormControlTextarea1").val().trim() === "") {
+                      alert("Invalid input, please type in your sentence.");
+                      $('#btnText').show();
+                      $('#btnLoad').hide();
+                      $("#disambigutebtn").prop("disabled", false);
+                      return 0;
+                  } */
+                $.ajax({
+                    type: 'POST',
+                    url: 'https://mahlomola.pythonanywhere.com/api/register/',
+                    data: createObject(),
+                    dataType: 'json',
+                    success: function(data, textStatus, jqXHR) {
+                        console.log(jqXHR);
+
+                        /*   $("#results").val("");
+                          for (var j in data.data) {
+
+                              $("#results").append("<li class=\"list-group-item\">" + data.data[j].Definition + "</li>");
+
+
+
+                          }
+
+                          $('#tt').html(data.data[0].pos.text); */
+                        $("#disambigutebtn").prop("disabled", false);
+                        $('#btnText').show();
+                        $('#btnLoad').hide();
+
+                        if (textStatus === 'success') {
+                            alert("succesfully registered");
+                            window.location = 'index.html';
+                        }
+
+                    },
+                    error: function(data) {
+                        console.log("error", data.responseJSON);
+                        $("#disambigutebtn").prop("disabled", false);
+                        $('#btnText').show();
+                        $('#btnLoad').hide();
+                    }
+                });
+
+            }
+
+
+            function sentiment() {
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://127.0.0.1:8000/api/ai/',
+                    dataType: 'json',
+                    data: {
+                        text: $("#exampleFormControlTextarea1").val()
+                    },
+                    success: function(data) {
+                        console.log(data);
+
+
+                    },
+                    error: function(data) {
+                        console.log("error", data);
+
+                    }
+                })
+            }
+
+            function createObject() {
+                let data = {
+                    first_name: $("#firstName").val(),
+                    last_name: $("#lastName").val(),
+                    email: $("#email").val(),
+                    phone_number: $("#phoneNumber").val(),
+                    username: $("#userName").val(),
+                    password: $("#password").val(),
+                    confirmPassword: $("#confirmPassword").val(),
+
+                }
+
+
+                return data;
+            }
+        </script>
+
+    </body>
+
+</html>
